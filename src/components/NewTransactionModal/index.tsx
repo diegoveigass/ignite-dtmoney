@@ -1,7 +1,6 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import Modal from 'react-modal';
-
-import { api } from '../../services/api';
+import { TransactionsContext } from '../../TransactionsContext';
 
 import closeImg from '../../assets/close.svg';
 import incomeImg from '../../assets/income.svg';
@@ -23,12 +22,17 @@ export function NewTransactionModal({
   const [type, setType] = useState<'deposit' | 'withdraw'>('deposit');
   const [category, setCategory] = useState('');
 
+  const { createTransaction } = useContext(TransactionsContext);
+
   function handleCreateNewTransaction(event: FormEvent) {
     event.preventDefault();
 
-    const data = { title, value, type, category };
-
-    api.post('/transactions', data);
+    createTransaction({
+      title,
+      value,
+      category,
+      type,
+    });
   }
 
   return (
